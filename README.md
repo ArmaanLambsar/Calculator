@@ -1,1 +1,1 @@
-# Calculator
+This is a working calculator easy to use. To use it, you open the calculator then you must click on the numbers on the screen to calculate. You can Use the Basic Mode or the Scientific Mode to calculate. The Calculator tracks you history so you don't have to remember what you calculated.
