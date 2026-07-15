@@ -9,23 +9,23 @@ const scientificButtons = document.querySelector('.scientific-mode');
 let isScientific = false;
 let history = [];
 
-//Append number
+// Append number
 function appendNumber(num) {
     display.value += num;
 }
 
-//Append operator
+// Append operator
 function appendOperator(op) {
     if (display.value === '' || /[+\-*/]$/.test(display.value)) return;
     display.value += op;
 }
 
-//Append scientific function
+// Append scientific function
 function appendFunction(func) {
     display.value += func;
 }
 
-//Clear display
+// Clear display
 function clearDisplay() {
     display.value = '';
 }
@@ -39,11 +39,51 @@ function deleteLast() {
 function calculateResult() {
     try {
         if (display.value === '') return;
+        // Safe evaluation using Function constructor
         const result = Function('"use strict";return (' + display.value + ')')();
         if (!isFinite(result)) throw new Error("Math Error");
+
+        // Add to history
         addToHistory(display.value, result);
+
+        // Show result immediately
         display.value = result;
     } catch {
-        display.value
+        display.value = "Error";
     }
 }
+
+// Add calculation to history
+function addToHistory(expression, result) {
+    const entry = `${expression} = ${result}`;
+    history.unshift(entry); // Add to start
+    renderHistory();
+}
+
+// Render history list
+function renderHistory() {
+    historyList.innerHTML = '';
+    history.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        historyList.appendChild(li);
+    });
+}
+
+// Toggle between basic and scientific mode
+modeToggle.addEventListener('click', () => {
+    isScientific = !isScientific;
+    if (isScientific) {
+        scientificButtons.classList.remove('hidden');
+        modeToggle.textContent = "Switch to Basic";
+    } else {
+        scientificButtons.classList.add('hidden');
+        modeToggle.textContent = "Switch to Scientific";
+    }
+});
+
+// Clear history
+clearHistoryBtn.addEventListener('click', () => {
+    history = [];
+    renderHistory();
+});
