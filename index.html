@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Basic & Scientific Calculator</title>
+<title>Scientific & Basic Calculator</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,17 +16,17 @@
 
     <input type="text" id="display" disabled>
 
+    <!-- Basic Mode -->
     <div class="buttons basic-mode">
-        <!--Basic Button Modes-->
         <button class="clear" onclick="clearDisplay()">C</button>
-        <button onclick="deleteLast()">DEL</button>
-        <button class="operator" onclick="appendOperator('/')">/</button>
-        <button class="operator" onclick="appendOperator('*')">*</button>
+        <button onclick="deleteLast()">⌫</button>
+        <button class="operator" onclick="appendOperator('/')">÷</button>
+        <button class="operator" onclick="appendOperator('*')">×</button>
 
         <button onclick="appendNumber('7')">7</button>
         <button onclick="appendNumber('8')">8</button>
         <button onclick="appendNumber('9')">9</button>
-        <button class="operator" onclick="appendOperator('-')">-</button>
+        <button class="operator" onclick="appendOperator('-')">−</button>
 
         <button onclick="appendNumber('4')">4</button>
         <button onclick="appendNumber('5')">5</button>
@@ -35,22 +36,21 @@
         <button onclick="appendNumber('1')">1</button>
         <button onclick="appendNumber('2')">2</button>
         <button onclick="appendNumber('3')">3</button>
-        <button class="operator" onclick="appendOperator('=')">=</button>
+        <button class="equal" onclick="calculateResult()">=</button>
 
         <button onclick="appendNumber('0')">0</button>
         <button onclick="appendNumber('.')">.</button>
     </div>
 
+    <!-- Scientific Mode -->
     <div class="buttons scientific-mode hidden">
-        <!--Scientific Button Modes-->
         <button onclick="appendFunction('Math.sin(')">sin</button>
         <button onclick="appendFunction('Math.cos(')">cos</button>
         <button onclick="appendFunction('Math.tan(')">tan</button>
-        <button onclick="appendFunction('Math.log(')">log</button>
         <button onclick="appendFunction('Math.sqrt(')">√</button>
 
-        <button onclick="appendFunction('Math.pow(')">x^y</button>
-        <button onclick="appendFunction('Math.log10(')">log10</button>
+        <button onclick="appendFunction('Math.pow(')">xʸ</button>
+        <button onclick="appendFunction('Math.log10(')">log</button>
         <button onclick="appendFunction('Math.log(')">ln</button>
         <button onclick="appendFunction('Math.PI')">π</button>
 
@@ -58,9 +58,10 @@
         <button onclick="appendFunction('Math.abs(')">abs</button>
         <button onclick="appendFunction('Math.exp(')">exp</button>
         <button onclick="appendFunction('Math.floor(')">floor</button>
-     </div>
+    </div>
 
-     <div class="history">
+    <!-- History -->
+    <div class="history">
         <h3>History</h3>
         <ul id="historyList"></ul>
     </div>

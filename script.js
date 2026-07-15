@@ -3,7 +3,6 @@ const historyList = document.getElementById('historyList');
 const modeToggle = document.getElementById('modeToggle');
 const clearHistoryBtn = document.getElementById('clearHistory');
 
-const basicButtons = document.querySelector('.basic-mode');
 const scientificButtons = document.querySelector('.scientific-mode');
 
 let isScientific = false;
@@ -86,4 +85,11 @@ modeToggle.addEventListener('click', () => {
 clearHistoryBtn.addEventListener('click', () => {
     history = [];
     renderHistory();
+});
+
+// Allow pressing Enter to calculate
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        calculateResult();
+    }
 });
