@@ -1,62 +1,49 @@
-let currentInput = '';
-let currentOperation = '';
-let previousInput = '';
+const display = document.getElementById('display');
+const historyList = document.getElementById('historyList');
+const modeToggle = document.getElementById('modeToggle');
+const clearHistoryBtn = document.getElementById('clearHistory');
 
-function appendNumber(number) {
-    currentInput += number;
-    UpdateDisplay();
+const basicButtons = document.querySelector('.basic-mode');
+const scientificButtons = document.querySelector('.scientific-mode');
+
+let isScientific = false;
+let history = [];
+
+//Append number
+function appendNumber(num) {
+    display.value += num;
 }
 
-function appendOperation(operation) {
-    if (currentInput === '') return;
-    if (previousInput !== '') calculate();
-    currentOperation = operation;
-    previousInput = currentInput;
-    currentInput = '';
-    updateDisplay();
+//Append operator
+function appendOperator(op) {
+    if (display.value === '' || /[+\-*/]$/.test(display.value)) return;
+    display.value += op;
 }
 
-function calculate() {
-    if (previousInput === '' || currentInput === '') return;
-
-    const prev = parseFloat(previousInput);
-    const current = parseFloat(currentInput);
-    let result;
-
-    switch (currentOperation) {
-        case '+':
-            result = prev + current;
-            break;
-        case '-':
-            result = prev - current;
-            break;
-        case '*':
-            result = prev * current;
-            break;
-        case '/':
-            if (current === 0) {
-                alert("Can't Divide by 0");
-                return;
-            }
-            result = prev / current;
-            break;
-        default:
-            return;
-    }
-
-     currentInput = result.toString();
-     currentOperation = '';
-     previousInput = '';
-    updateDisplay();
+//Append scientific function
+function appendFunction(func) {
+    display.value += func;
 }
 
-    function clearDisplay() {
-        currentInput = '';
-        previousInput = '';
-        currentOperation = '';
-        updateDisplay();
-    }
+//Clear display
+function clearDisplay() {
+    display.value = '';
+}
 
-    function updateDisplay() {
-        document.getElementById('display').value = `${currentInput} ${currentOperation} ${currentInput}`;
+// Delete last character
+function deleteLast() {
+    display.value = display.value.slice(0, -1);
+}
+
+// Calculate result safely
+function calculateResult() {
+    try {
+        if (display.value === '') return;
+        const result = Function('"use strict";return (' + display.value + ')')();
+        if (!isFinite(result)) throw new Error("Math Error");
+        addToHistory(display.value, result);
+        display.value = result;
+    } catch {
+        display.value
     }
+}

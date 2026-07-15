@@ -1,122 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculator</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background: #f4f4f4;
-    }
-    .calculator {
-        background: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 260px;
-    }
-    input[type="text"] {
-        width: 100%;
-        height: 50px;
-        font-size: 1.5rem;
-        text-align: right;
-        margin-bottom: 10px;
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-    .button {
-        padding: 15px;
-        font-size: 1.2rem;
-        border: none;
-        border-radius: 5px;
-        background: #eee;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-    .button:hover {
-        background: #ddd;
-    }
-    .operator {
-        background: #f9a825;
-        color: #fff;
-    }
-    .operator:hover {
-        background: #f57f17;
-    }
-</style>
+<title>Basic & Scientific Calculator</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="calculator">
+    <div class="top-bar">
+        <button id="modeToggle">Switch to Scientific</button>
+        <button id="clearHistory">Clear History</button>
+    </div>
+
     <input type="text" id="display" disabled>
-    <div class="buttons">
-        <button onclick="clearDisplay()">C</button>
+
+    <div class="buttons basic-mode">
+        <!--Basic Button Modes-->
+        <button class="clear" onclick="clearDisplay()">C</button>
         <button onclick="deleteLast()">DEL</button>
         <button class="operator" onclick="appendOperator('/')">/</button>
-        <button class="operator" onclick="appendOperator('*')">*</button>"
+        <button class="operator" onclick="appendOperator('*')">*</button>
 
         <button onclick="appendNumber('7')">7</button>
         <button onclick="appendNumber('8')">8</button>
         <button onclick="appendNumber('9')">9</button>
         <button class="operator" onclick="appendOperator('-')">-</button>
 
-        <button onclick="appendNumber"('4')">4</button>"
-        <button onclick="appendNumber"('5')">5</button>"
-        <button onclick="appendNumber"('6')">6</button>"
+        <button onclick="appendNumber('4')">4</button>
+        <button onclick="appendNumber('5')">5</button>
+        <button onclick="appendNumber('6')">6</button>
         <button class="operator" onclick="appendOperator('+')">+</button>
 
-        <button onclick="appendNumber"('1')">1</button>"
-        <button onclick="appendNumber"('2')">2</button>"
-        <button onclick="appendNumber"('3')">3</button>"
-        <button rowspan="2" onclick="calculateResult()">=</button>
+        <button onclick="appendNumber('1')">1</button>
+        <button onclick="appendNumber('2')">2</button>
+        <button onclick="appendNumber('3')">3</button>
+        <button class="operator" onclick="appendOperator('=')">=</button>
 
-        <button onclick="appendNumber"('0')">0</button>
-        <button onclick="appendNumber"('.')">.</button>
+        <button onclick="appendNumber('0')">0</button>
+        <button onclick="appendNumber('.')">.</button>
+    </div>
+
+    <div class="buttons scientific-mode hidden">
+        <!--Scientific Button Modes-->
+        <button onclick="appendFunction('Math.sin(')">sin</button>
+        <button onclick="appendFunction('Math.cos(')">cos</button>
+        <button onclick="appendFunction('Math.tan(')">tan</button>
+        <button onclick="appendFunction('Math.log(')">log</button>
+        <button onclick="appendFunction('Math.sqrt(')">√</button>
+
+        <button onclick="appendFunction('Math.pow(')">x^y</button>
+        <button onclick="appendFunction('Math.log10(')">log10</button>
+        <button onclick="appendFunction('Math.log(')">ln</button>
+        <button onclick="appendFunction('Math.PI')">π</button>
+
+        <button onclick="appendFunction('Math.E')">e</button>
+        <button onclick="appendFunction('Math.abs(')">abs</button>
+        <button onclick="appendFunction('Math.exp(')">exp</button>
+        <button onclick="appendFunction('Math.floor(')">floor</button>
+     </div>
+
+     <div class="history">
+        <h3>History</h3>
+        <ul id="historyList"></ul>
     </div>
 </div>
 
-<script>
-    const display = document.getElementById('display');
-
-    // Append number to display
-    function appendNumber(num) {
-        display.value += num;
-    }
-
-    // Append operator with validation
-    function appendOperator(op) {
-        if (display.value === '' || /[+\-*/]$/.test(display.value)) return;
-        display.value += op;
-    }
-
-    // Clear display
-    function clearDisplay () {
-        display.value = '';
-    }
-
-    // Delete last character
-    function deleteLast() {
-        display.value = display.value.slice(0, -1);
-    }
-
-    // Calulate result with error handling
-    function calculateResult() {
-        try {
-            if (display.value === '') return;
-            const result = eval(display.value); // For simple demo; avoid eval in production
-            if (!isFinite(result)) throw new Error('Math Error');
-            display.value = result;
-        } catch (error) {
-            display.value = 'Error';
-        }
-    }
-    </script>
-
-    </body>
-    </html>
+<script src="script.js"></script>
+</body>
+</html>
