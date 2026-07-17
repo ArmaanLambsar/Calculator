@@ -15,13 +15,51 @@ function appendNumber(num) {
 
 // Append operator
 function appendOperator(op) {
-    if (display.value === '' || /[+\-*/]$/.test(display.value)) return;
+    if (display.value === '' || /[+\-*/^]$/.test(display.value)) return;
     display.value += op;
 }
 
 // Append scientific function
 function appendFunction(func) {
     display.value += func;
+}
+
+function normalizeExpression(expression) {
+    if (!expression) return '';
+
+    let normalized = expression
+        .trim()
+        .replace(/×/g, '*')
+        .replace(/÷/g, '/')
+        .replace(/\^/g, '**')
+        .replace(/π/g, 'Math.PI')
+        .replace(/e/g, 'Math.E');
+
+    const openParentheses = (normalized.match(/\(/g) || []).length;
+    const closeParentheses = (normalized.match(/\)/g) || []).length;
+
+    if (openParentheses > closeParentheses) {
+        normalized += ')'.repeat(openParentheses - closeParentheses);
+    }
+
+    return normalized;
+}
+
+function calculateExpression(expression) {
+    let normalized = normalizeExpression(expression);
+    normalized = normalized.replace(/Math\.sin\(/g, 'sin(');
+    normalized = normalized.replace(/Math\.cos\(/g, 'cos(');
+    normalized = normalized.replace(/Math\.tan\(/g, 'tan(');
+
+    try {
+        const result = Function(
+            '"use strict"; const sin = (value) => Math.sin(value * Math.PI / 180); const cos = (value) => Math.cos(value * Math.PI / 180); const tan = (value) => Math.tan(value * Math.PI / 180); return (' + normalized + ')'
+        )();
+        if (!Number.isFinite(result)) throw new Error('Math Error');
+        return result;
+    } catch {
+        return 'Error';
+    }
 }
 
 // Clear display
@@ -36,20 +74,20 @@ function deleteLast() {
 
 // Calculate result safely
 function calculateResult() {
-    try {
-        if (display.value === '') return;
-        // Safe evaluation using Function constructor
-        const result = Function('"use strict";return (' + display.value + ')')();
-        if (!isFinite(result)) throw new Error("Math Error");
+    if (display.value === '') return;
 
-        // Add to history
-        addToHistory(display.value, result);
+    const result = calculateExpression(display.value);
 
-        // Show result immediately
-        display.value = result;
-    } catch {
-        display.value = "Error";
+    if (result === 'Error') {
+        display.value = 'Error';
+        return;
     }
+
+    // Add to history
+    addToHistory(display.value, result);
+
+    // Show result immediately
+    display.value = result;
 }
 
 // Add calculation to history
@@ -93,3 +131,5 @@ document.addEventListener('keydown', (event) => {
         calculateResult();
     }
 });
+
+window.calculateExpression = calculateExpression;
